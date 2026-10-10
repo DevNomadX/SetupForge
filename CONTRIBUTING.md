@@ -47,16 +47,29 @@ go build -o bin/setupforge ./cmd/setupforge
 
 ---
 
-## 3. Contributor Workflow
+## 3. Branch Strategy & Contributor Workflow
+
+SetupForge uses a two-tier branch model:
+
+- **`develop`**: The primary integration branch for ongoing active development. All feature branches, bugfix branches, and refactors must branch from and target `develop`.
+- **`main`**: The stable, reviewed, release-ready branch. Changes are merged into `main` from `develop` via reviewed release pull requests.
+
+```text
+feature/foo ──┐
+              ▼
+develop ────────────► [Integration & Testing] ──────► main [Release-Ready]
+              ▲
+bugfix/bar ───┘
+```
 
 ### Branch Naming
-Use short, descriptive branch names:
+Create branches from `develop` using clear prefixes:
 - `feat/<short-description>` — new capabilities
 - `fix/<short-description>` — bug fixes
 - `refactor/<short-description>` — code restructuring without behavior changes
 - `test/<short-description>` — test additions or improvements
 - `docs/<short-description>` — documentation updates
-- `chore/<short-description>` — maintenance or tooling tasks
+- `chore/<short-description>` — maintenance, CI, or tooling tasks
 
 ### Commit Message Convention
 We follow concise, intention-revealing commit messages:
@@ -71,6 +84,10 @@ Examples:
 - `docs: document system operation safety`
 
 Keep commits logically focused. Do not mix unrelated refactorings or cosmetic cleanups into feature commits.
+
+### Pull Request Targets
+- Target **`develop`** for all standard contributions, features, and fixes.
+- Pull requests targeting **`main`** are reserved for release promotions from `develop`.
 
 ---
 
@@ -95,6 +112,11 @@ go build -o bin/setupforge ./cmd/setupforge
 For UI changes:
 - Verify layout rendering across key dimensions: `80×24`, `100×30`, and `120×35`.
 - Check all interaction states: empty, loading, success, error, and confirmation.
+
+> [!NOTE]
+> **CI Scope & Limitations**:
+> Automated GitHub Actions CI checks formatting, static analysis (`go vet`), in-memory unit tests, and build compilation in an unprivileged Linux environment.
+> A passing CI run confirms code logic and interface contracts, but **CI alone does not prove live Fedora privileged transaction safety or crash recovery**. Operations involving live host DNF5 databases or elevated execution must be tested in dedicated local Fedora environments.
 
 ---
 
