@@ -1,0 +1,45 @@
+name: CI
+
+'on':
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Build, Vet & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Verify Code Formatting (gofmt)
+        run: |
+          UNFORMATTED=$(gofmt -l .)
+          if [ -n "$UNFORMATTED" ]; then
+            echo "The following files are not formatted with gofmt:"
+            echo "$UNFORMATTED"
+            exit 1
+          fi
+
+      - name: Static Analysis (go vet)
+        run: go vet ./...
+
+      - name: Unit & Component Tests
+        # Runs isolated unit and component test suites in unprivileged CI runner.
+        # Note: Non-destructive integration tests gracefully skip when Fedora/DNF5 binaries are absent.
+        # These checks verify code logic and contracts, not privileged host transaction safety.
+        run: go test -v -race -count=1 ./...
+
+      - name: Build Application Executable
+        run: go build -v -o bin/setupforge ./cmd/setupforge

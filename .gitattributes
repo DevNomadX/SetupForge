@@ -1,0 +1,25 @@
+# SetupForge — Git Attributes
+# Enforce consistent LF line endings across platforms for text files
+
+* text=auto eol=lf
+
+# Explicit source code and configuration handling
+*.go text eol=lf
+*.mod text eol=lf
+*.sum text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.sh text eol=lf
+
+# Documentation and agent instructions
+*.md text eol=lf
+
+# Binary media formats
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary

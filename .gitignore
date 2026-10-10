@@ -1,0 +1,36 @@
+# SetupForge — Git Ignore Rules
+
+# Compiled binaries
+/bin/setupforge
+/setupforge
+
+# Go build, test, and profiling artifacts
+*.test
+*.out
+*.prof
+*.cov
+coverage.html
+
+# Operating system artifacts
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# Editor and IDE configurations
+.idea/
+.vscode/
+
+# Local environment and secret patterns (defense-in-depth)
+# Note: Always verify staged files prior to commit; .gitignore is not a security boundary.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+id_rsa
+id_ed25519
+
+# Build distributions and temporary artifacts
+/dist/
